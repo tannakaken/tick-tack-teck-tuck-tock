@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Canvas } from "@react-three/fiber";
+import "./App.css";
+import { OrbitControls } from "@react-three/drei";
+import GridPoint from "./GridPoint";
+import { Vector3Tuple } from "three";
 
-function App() {
+const SCALE = 3;
+const gridPoints: Vector3Tuple[] = [];
+
+for (let x = -1; x <= 1; x++) {
+  for (let y = -1; y <= 1; y++) {
+    for (let z = -1; z <= 1; z++) {
+      gridPoints.push([SCALE * x, SCALE * y, SCALE * z]);
+    }
+  }
+}
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Canvas camera={{ position: [10, 0, 0] }}>
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          enableDamping
+          reverseOrbit
+          dampingFactor={0.2}
+        />
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        {gridPoints.map((gridPoint, i) => (
+          <GridPoint key={`${i}th-grid`} position={gridPoint} />
+        ))}
+      </Canvas>
     </div>
   );
-}
+};
 
 export default App;
